@@ -31,13 +31,48 @@ class Deck:
     random.shuffle(self.cards)
 
 
+class Player:
+  def __init__(self):
+    self.player_hand = []
+    # self.player_hand.append(card)
+
+  def __str__(self):
+    hand_as_string = ""
+    for card in self.player_hand:
+      hand_as_string += f"{card} "
+    return hand_as_string
+
+
+class Dealer:
+  def __init__(self):
+    self.player_hand = []
+    # self.player_hand.append(card)
+
+  def __str__(self):
+    hand_as_string = ""
+    for card in self.player_hand:
+      hand_as_string += f"{card} "
+    return hand_as_string
+
+
 class Game:
   def __init__(self):
     self.deck = Deck(SUITS, RANKS)
     self.deck.shuffle()
-  # create a deck
-  # shuffle deck
+
+  def deal_card(self, person):
+    dealt_card = self.deck.cards.pop()
+    person.player_hand.append(dealt_card)
 
 
 new_game = Game()
+player1 = Player()
+dealer = Dealer()
+
 print(new_game.deck)
+while len(player1.player_hand and dealer.player_hand) < 2:
+  new_game.deal_card(player1)
+  new_game.deal_card(dealer)
+
+print(f"Player1 hand: {player1}")
+print(f"Dealer hand: {dealer}")

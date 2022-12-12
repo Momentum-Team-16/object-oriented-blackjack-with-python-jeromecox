@@ -25,5 +25,12 @@ Game
 
 
 # gameplay
-### shuffle
+### create deck
+### shuffle deck
+### create players
+### deal cards to players one at a time
+### check scores
+### if dealer score < 17, deal card to dealer
+### if dealer score > 21, game over, player wins
+### player chooses hit or stay
 ### 
