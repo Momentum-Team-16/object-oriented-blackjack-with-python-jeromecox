@@ -1,0 +1,29 @@
+start with classes (nouns, main characters)
+
+Card
+  - value
+  - rank
+  - suit
+
+Dealer
+  - hand
+
+Player
+  - hand
+
+Deck
+  - cards
+  each of these cards is an instance of the Card class
+  ** methods (actions)
+  - shuffle
+
+Game
+  - player
+  - dealer
+  - deck
+    - cards
+
+
+# gameplay
+### shuffle
+### 
