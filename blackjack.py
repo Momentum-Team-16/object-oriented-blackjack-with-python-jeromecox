@@ -3,6 +3,11 @@ import os
 import time
 
 
+def sleep_clear(num):
+  time.sleep(num)
+  os.system('clear')
+
+
 SUITS = ['♣️', '♦️', '♠️', '♥️']
 RANKS = ['A', 'J', 'Q', 'K', 2, 3, 4, 5, 6, 7, 8, 9, 10]
 FACE = ['J', 'Q', 'K']
@@ -47,29 +52,24 @@ class Player:
     return hand_as_string
 
 
-class Dealer:
-  def __init__(self):
-    self.player_hand = []
-    self.score = 0
-
-  def __str__(self):
-    hand_as_string = ""
-    for card in self.player_hand:
-      hand_as_string += f"{card} "
-    return hand_as_string
-
-
 class Game:
   def __init__(self):
     self.deck = Deck(SUITS, RANKS)
     self.deck.shuffle()
     self.player1 = Player()
-    self.dealer = Dealer()
+    self.dealer = Player()
+    self.deal_hands()
 
   def deal_card(self, person):
     dealt_card = self.deck.cards.pop()
     person.player_hand.append(dealt_card)
     self.calculate_score(person)
+
+  def deal_hands(self):
+    while len(self.player1.player_hand and self.dealer.player_hand) < 2:
+      self.deal_card(self.player1)
+      self.deal_card(self.dealer)
+    self.hand_hide()
 
   def hand_hide(self):
     print(f"\nPlayer1 hand: {self.player1}")
@@ -78,6 +78,54 @@ class Game:
   def hand_show(self):
     print(f"\nPlayer1 hand: {self.player1}")
     print(f"Dealer hand: {self.dealer}")
+
+  def player_turn(self, person):
+    player1_play = True
+    while person.score < 22 and player1_play:
+      player_decision = input("\nDoes Player1 want to hit or stand?\n1: Hit or 2: Stand? ").upper()
+
+      if player_decision in ["1", "H", "HIT"]:
+        sleep_clear(0.5)
+        print("\nPlayer1 hits.")
+        self.deal_card(person)
+        self.hand_hide()
+
+      elif player_decision in ["2", "S", "STAND"]:
+        print("\nPlayer1 stands.")
+        player1_play = False
+
+      else:
+        print("\nNot a valid input")
+
+  def dealer_turn(self, person): 
+    sleep_clear(1)
+    print("\nThe dealer reveals his card.")
+    self.hand_show()
+
+    while person.score < 17:
+      sleep_clear(2)
+      print("\nThe dealer hits.")
+      self.deal_card(person)
+      self.hand_show()
+
+    if person.score > 21:
+      time.sleep(2)
+      print("\nDealer busts. Congratulations! Player1 wins!")
+    elif self.player1.score > person.score:
+      time.sleep(2)
+      print("\nThe dealer stands.")
+      time.sleep(2)
+      print("\nCongratulations! Player1 wins!")
+    elif self.player1.score == person.score:
+      time.sleep(2)
+      print("\nThe dealer stands.")
+      time.sleep(2)
+      print("\nWomp womp. It's a tie")
+    else:
+      time.sleep(2)
+      print("\nThe dealer stands.")
+      time.sleep(2)
+      print("\nPlayer1 loses. House wins.")
 
   def calculate_score(self, person):
     person.score = 0
@@ -108,72 +156,17 @@ def play_again():
     os.system('clear')
 
 
-def sleep_clear(num):
-  time.sleep(num)
-  os.system('clear')
-
-
 def play_game():
   os.system('clear')
-  print("\n♠️ ♥️ LET'S PLAY BLACKJACK! ♣️ ♦️ ")
+  print("\n♠️ ♥️  LET'S PLAY BLACKJACK! ♣️ ♦️ ")
   new_game = Game()
 
-  while len(new_game.player1.player_hand and new_game.dealer.player_hand) < 2:
-    new_game.deal_card(new_game.player1)
-    new_game.deal_card(new_game.dealer)
-
-  new_game.hand_hide()
-
-  player1_play = True
-  while new_game.player1.score < 22 and player1_play:
-    player_decision = input("\nDoes Player1 want to hit or stand?\n1: Hit or 2: Stand? ").upper()
-
-    if player_decision in ["1", "H", "HIT"]:
-      sleep_clear(1)
-      print("\nPlayer1 hits.")
-      new_game.deal_card(new_game.player1)
-      new_game.hand_hide()
-
-    elif player_decision in ["2", "S", "STAND"]:
-      print("\nPlayer1 stands.")
-      player1_play = False
-
-    else:
-      print("\nNot a valid input")
+  new_game.player_turn(new_game.player1)
 
   if new_game.player1.score > 21:
     print("\nPlayer1 busts. House wins.")
   else:
-    sleep_clear(2)
-    print("\nThe dealer reveals his card.")
-    new_game.hand_show()
-
-    while new_game.dealer.score < 17:
-      sleep_clear(2)
-      print("\nThe dealer hits.")
-      new_game.deal_card(new_game.dealer)
-      print(new_game.dealer.score)
-      breakpoint()
-      new_game.hand_show()
-
-    if new_game.dealer.score > 21:
-      sleep_clear(2)
-      print("\nDealer busts. Congratulations! Player1 wins!")
-    elif new_game.player1.score > new_game.dealer.score:
-      time.sleep(2)
-      print("\nThe dealer stands.")
-      time.sleep(2)
-      print("\nCongratulations! Player1 wins!")
-    elif new_game.player1.score == new_game.dealer.score:
-      time.sleep(2)
-      print("\nThe dealer stands.")
-      time.sleep(2)
-      print("\nWomp womp. It's a tie")
-    else:
-      time.sleep(2)
-      print("\nThe dealer stands.")
-      time.sleep(2)
-      print("\nPlayer1 loses. House wins.")
+    new_game.dealer_turn(new_game.dealer)
 
   time.sleep(1)
   play_again()
