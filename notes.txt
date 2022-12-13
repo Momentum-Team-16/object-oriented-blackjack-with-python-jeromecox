@@ -29,8 +29,13 @@ Game
 ### shuffle deck
 ### create players
 ### deal cards to players one at a time
-### check scores
-### if dealer score < 17, deal card to dealer
-### if dealer score > 21, game over, player wins
-### player chooses hit or stay
+### calculate scores
+### if dealer score == 21, check player for 21
+### if dealer score != 21, player plays - hit or stand
+### if player score > 21, dealer wins
+### if player <= 21, ready for dealer plays - 
+      if dealer score < 17, dealer must hit
+      if dealer score in range (17, 22), dealer     stands
+      if dealer score > 21, dealer loses
+### 
 ### 
