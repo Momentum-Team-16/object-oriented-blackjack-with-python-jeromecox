@@ -1,4 +1,6 @@
 import random
+import os
+
 
 SUITS = ['♣️', '♦️', '♠️', '♥️']
 RANKS = ['A', 'J', 'Q', 'K', 2, 3, 4, 5, 6, 7, 8, 9, 10]
@@ -73,7 +75,7 @@ class Game:
 
   def calculate_score(self, person):
     total = 0
-    ace = 0
+    num_ace = 0
     for card in person.player_hand:
       if card.rank in range(2, 11):
         total += card.rank
@@ -81,28 +83,27 @@ class Game:
         total += 10
       else:
         total += 11
-        ace += 1
-    while ace and total > 21:
+        num_ace += 1
+    while num_ace and total > 21:
       total -= 10
-      ace -= 1
+      num_ace -= 1
     return total
 
 
 def play_again():
-  good_input = 0
-  while good_input == 0:
+  replay = input("\nWould you like to play again? y / n: ").lower()
+  while replay not in ["y", "n", "yes", "no"]:
+    print("\nPlease enter a valid input.")
     replay = input("\nWould you like to play again? y / n: ").lower()
-    if replay not in ["y", "n", "yes", "no"]:
-      print("\nPlease enter a valid input.")
-      continue
-    elif replay in ["y", "yes"]:
-      play_game()
-    else:
-      print("\nThanks for playing!")
-      good_input += 1
+
+  if replay in ["y", "yes"]:
+    play_game()
+  else:
+    print("\nThanks for playing!")
 
 
 def play_game():
+  os.system('clear')
   print("\n♠️ ♥️ LET'S PLAY BLACKJACK! ♣️ ♦️ ")
   new_game = Game()
   player1 = Player()
@@ -123,16 +124,19 @@ def play_game():
   player1_play = True
   while player1_score < 22 and player1_play:
     player_decision = input("\nDoes Player1 want to hit or stand?\n1: Hit or 2: Stand? ").upper()
-    if player_decision in ["1", "HIT"]:
+
+    if player_decision in ["1", "H", "HIT"]:
       print("\nPlayer1 hits.")
       new_game.deal_card(player1)
       # new_game.hand_hide()
       print(f"\nPlayer1 hand: {player1}")
       print(f"Dealer hand: {dealer.player_hand[0]}, __")
       player1_score = new_game.calculate_score(player1)
-    elif player_decision in ["2", "STAND"]:
+
+    elif player_decision in ["2", "S", "STAND"]:
       print("\nPlayer1 stands.")
       player1_play = False
+
     else:
       print("\nNot a valid input")
 
