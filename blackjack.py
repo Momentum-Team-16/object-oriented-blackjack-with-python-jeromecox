@@ -1,16 +1,17 @@
 import random
 import os
 import time
+from function import print_dealing
 
 
 def sleep_clear(num):
   time.sleep(num)
-  os.system('clear')
+  os.system("clear")
 
 
-SUITS = ['♣️', '♦️', '♠️', '♥️']
-RANKS = ['A', 'J', 'Q', 'K', 2, 3, 4, 5, 6, 7, 8, 9, 10]
-FACE = ['J', 'Q', 'K']
+SUITS = ["♣️", "♦️", "♠️", "♥️"]
+RANKS = ["A", "J", "Q", "K", 2, 3, 4, 5, 6, 7, 8, 9, 10]
+FACE = ["J", "Q", "K"]
 
 
 class Card:
@@ -68,7 +69,8 @@ class Game:
   def deal_hands(self):
     while len(self.player1.player_hand and self.dealer.player_hand) < 2:
       self.deal_card(self.player1)
-      self.deal_card(self.dealer)
+      self.deal_card(self.dealer)  
+    print_dealing()
     self.hand_hide()
 
   def hand_hide(self):
@@ -120,7 +122,7 @@ class Game:
       time.sleep(2)
       print("\nThe dealer stands.")
       time.sleep(2)
-      print("\nWomp womp. It's a tie")
+      print("\nWomp womp. It's a tie.")
     else:
       time.sleep(2)
       print("\nThe dealer stands.")
@@ -142,6 +144,21 @@ class Game:
       person.score -= 10
       num_ace -= 1
 
+  def check_natural(self):
+    self.naturals = 0
+    if self.dealer.score == 21 and self.player1.score == 21:
+      self.naturals += 1
+      print("\nDealer and Player1 both hit blackjack.")
+      print("\nWomp womp. It's a tie.")
+    elif self.dealer.score == 21:
+      self.naturals += 1
+      print("\nDealer hit blackjack.")
+      print("\nPlayer1 loses. House wins.")
+    elif self.player1.score == 21:
+      self.naturals += 1
+      print("\nPlayer1 hit blackjack!")
+      print("\nCongratulations! Player1 wins!")
+
 
 def play_again():
   replay = input("\nWould you like to play again? y / n: ").lower()
@@ -153,20 +170,26 @@ def play_again():
     play_game()
   else:
     print("\nThanks for playing!")
-    os.system('clear')
+    os.system("clear")
 
 
 def play_game():
-  os.system('clear')
+  os.system("clear")
   print("\n♠️ ♥️  LET'S PLAY BLACKJACK! ♣️ ♦️ ")
   new_game = Game()
 
-  new_game.player_turn(new_game.player1)
+  # new_game.player1.score = 21
+  # new_game.dealer.score = 21
 
-  if new_game.player1.score > 21:
-    print("\nPlayer1 busts. House wins.")
-  else:
-    new_game.dealer_turn(new_game.dealer)
+  new_game.check_natural()
+
+  if new_game.naturals < 1:
+    new_game.player_turn(new_game.player1)
+
+    if new_game.player1.score > 21:
+      print("\nPlayer1 busts. House wins.")
+    else:
+      new_game.dealer_turn(new_game.dealer)
 
   time.sleep(1)
   play_again()
