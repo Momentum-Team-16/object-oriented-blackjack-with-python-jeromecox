@@ -1,13 +1,7 @@
 import random
 import os
 import time
-from function import print_dealing
-
-
-def sleep_clear(num):
-  time.sleep(num)
-  os.system("clear")
-
+from function import *
 
 SUITS = ["♣️", "♦️", "♠️", "♥️"]
 RANKS = ["A", "J", "Q", "K", 2, 3, 4, 5, 6, 7, 8, 9, 10]
@@ -69,7 +63,7 @@ class Game:
   def deal_hands(self):
     while len(self.player1.player_hand and self.dealer.player_hand) < 2:
       self.deal_card(self.player1)
-      self.deal_card(self.dealer)  
+      self.deal_card(self.dealer)
     print_dealing()
     self.hand_hide()
 
@@ -177,9 +171,6 @@ def play_game():
   os.system("clear")
   print("\n♠️ ♥️  LET'S PLAY BLACKJACK! ♣️ ♦️ ")
   new_game = Game()
-
-  # new_game.player1.score = 21
-  # new_game.dealer.score = 21
 
   new_game.check_natural()
 
